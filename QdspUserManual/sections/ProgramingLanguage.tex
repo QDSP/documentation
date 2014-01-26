@@ -1,0 +1,320 @@
+\chapter{QDSP Programing language}
+
+\section{Language structure}\label{programmingLanguage_structure}
+The QDSP language, also called QDSP DSL, is designed according to the syntax from the language C. The code structure is based around a few different components, that can be added to the code. The main component is assignment operations, see \secref{programmingLanguage_AssignmentOperation}, that can assign math and data formats to eg. variables or IO memory. 
+
+It is also possible to define variables, constants, and addresses, for easier code writing see \secref{programmingLanguage_DataFormats}. Note that it is only possible to define this in the main level of the code, and not inside the predefined functions. It is not possible to create functions in the QDSP DSL, but a few predefined functions is available see \secref{programmingLanguage_Functions1} and \ref{programmingLanguage_functions}.
+
+\lstinputlisting[
+	style=c,
+	language=qdsp,
+	caption = ~,
+	label={code:ex:structure1}]
+  {pictures/codeSamples/structure1.qdsp}
+	
+The micro code created by the compiler, loops around at the end of the code, so the output of \myref{example}{code:ex:structure1} and \myref{example}{code:ex:structure2} will give the same result. The benefit of adding the \mono{while(true)} is to make initial calculations ore like before the \mono{while(true)}, that only will be executed once.
+	
+\lstinputlisting[
+	style=c,
+	language=qdsp,
+	caption = ~,
+	label={code:ex:structure2}]
+  {pictures/codeSamples/structure2.qdsp}
+
+At last it is possible to add a configuration block. It is only possible to have one configuration block, and it have to be the first part of the code. More about the configuration block can be found in \secref{programmingLanguage_configurations}.
+
+\subsection{Configurations}\label{programmingLanguage_configurations}
+It is possible to add a configuration block as the firs part of the QODS code. This allows the programmer to change some parameters used by the compiler. The most of the parameters, are only used then the QDSP is set to be run time programmable. An example on how to add a configuration block can be found in \myref{example}{code:ex:config}, and the full list of parameters are listed in \tabref{configurations}
+\lstinputlisting[
+	style=c,
+	language=qdsp,
+	caption = ~,
+	label={code:ex:config}]
+  {pictures/codeSamples/config.qdsp}
+	
+	
+\begin{savenotes}
+	\begin{table}[H]
+		\rowcolors{2}{table-gray}{}
+		\centering
+			\input{../includes/configurations}
+		\caption{Configurations}
+		\label{configurations}
+	\end{table}
+\end{savenotes}
+
+\subsection{Functions}\label{programmingLanguage_Functions1}
+There are to different kinds of functions, void functions and math functions. Void functions, like \mono{sleep()} or \mono{if()}, are used to tell the compiler to implement some code, or how to handle a part of the code. And Math functions are functions like \mono{max()} or \mono{parenthesis()}. These functions can only be used doing math operations, they leaves the result on the accumulator. For a full list of functions, and the syntax, see \secref{programmingLanguage_functions}
+
+\subsection{Data formats}\label{programmingLanguage_DataFormats}
+The QDSP DSL allow the programmer to use a few simple data formats, which make it a lot easier write code, and the code becomes more descriptive. The available formats are explained further beneath, and an example of how to define and use them is given.
+
+\subsubsection{Address}
+The term address in the QDSP DSL is used to access the IO and shared memory, to exchange values with ether the computer connected through Unity-Link or µTosNet, or with the rest of the FPGA. \myref{Example}{code:ex:address} shows how to pipe IO memory address 1 through the QDSP to shared memory address 1, without doing anything with the data.
+
+\lstinputlisting[
+	style=c,
+	language=qdsp,
+	caption = ~,
+	label={code:ex:address}]
+  {pictures/codeSamples/address.qdsp}
+	
+\subsubsection{Define}
+Defines are used to name addresses which makes the code more descriptive. \myref{Example}{code:ex:define} again shows the the piping of IO memory address 1 to shared memory address 1 as \myref{example}{code:ex:address}, but now the addresses is defined to names.
+
+\lstinputlisting[
+	style=c,
+	language=qdsp,
+	caption = ~,
+	label={code:ex:define}]
+  {pictures/codeSamples/define.qdsp}
+	
+\subsubsection{Variable}\label{programmingLanguage_Variable}
+Defining a variable reserves a heap register which afterwards can be referred to by the given name. It is optional to directly assign a value to the variable during the definition. A variable is a signed 32 bit value.
+
+\lstinputlisting[
+	style=c,
+	language=qdsp,
+	caption = ~,
+	label={code:ex:var}]
+  {pictures/codeSamples/var.qdsp}
+
+\subsubsection{Constant}
+Constants is a lot like the variables \secref{programmingLanguage_Variable}. The only differences is that the constant is read only, and have to be assigned to a value. The definition and use can be seen in \myref{example}{code:ex:const}.
+
+\lstinputlisting[
+	style=c,
+	language=qdsp,
+	caption = ~,
+	label={code:ex:const}]
+  {pictures/codeSamples/const.qdsp}
+	
+\subsubsection{Number}
+The QDSP is a 32 bit processor, and uses a 32 bit signed datatype for variables, constants, and numbers. Therefor the usable numbers are in the range from −2,147,483,648 to 2,147,483,647.
+
+\subsection{Boolean expression} 
+Boolean expressions are used in some of the available functions to determine if a given code have to be executed. In the QDSP DSL an Boolean expression can be a simple \mono{true} or \mono{false}, or it can be a comparison between to \textit{Math operation} using one of the comparators from \tabref{mathComparators}.
+
+\lstinputlisting[
+	style=c,
+	language=qdsp,
+	caption = ~,
+	label={code:ex:bool1}]
+  {pictures/codeSamples/bool1.qdsp}
+	
+	\lstinputlisting[
+	style=c,
+	language=qdsp,
+	caption = ~,
+	label={code:ex:bool2}]
+  {pictures/codeSamples/bool2.qdsp}
+	
+\begin{table}[H]
+	\rowcolors{2}{table-gray}{}
+	\centering
+		\input{../includes/mathComparators}
+		\caption{Math comparators}
+	\label{mathComparators}
+\end{table}
+
+\subsection{Assignment operation}\label{programmingLanguage_AssignmentOperation}
+An assignment operation is a writable data format such as variables, defines, and addresses, followed by one of the assignment operators listed in \tabref{assignmentOperators}. The most of the assignment operators takes an argument, in form of a math operation or one of the data formats. For information about math operations see \secref{programmingLanguage_MathOperation} or data formats see \secref{programmingLanguage_DataFormats}.
+
+\lstinputlisting[
+	style=c,
+	language=qdsp,
+	caption = ~,
+	label={code:ex:assignment}]
+  {pictures/codeSamples/assignment.qdsp}
+
+\begin{table}[H]
+	\rowcolors{2}{table-gray}{}
+	\centering
+		\input{../includes/assignmentoperators}
+		\caption{Assignment operators}
+		\label{assignmentOperators}
+\end{table}
+
+\subsection{Math operation}\label{programmingLanguage_MathOperation}
+The math operation, is a series of data formats like \textit{numbers}, \textit{variables}, \textit{constants}, or \textit{defines} separate by a math operator. The different operators can be seen in \tabref{mathOperators}. Note that the the bit shift operators only can be followed by a \textit{number} telling the amount of bit shifts to be executed.
+
+\lstinputlisting[
+	style=c,
+	language=qdsp,
+	caption = ~,
+	label={code:ex:mathoperation1}]
+  {pictures/codeSamples/mathoperation1.qdsp}
+
+Please note that compiler does not comply to the standard order of operations rules. The compiler solves the math from left to right. This means that the result of \myref{example}{code:ex:mathoperation1} will be 20 and not 15 for an input of 5. It is possible to force the the order by using parentheses as done in \myref{example}{code:ex:mathoperation2}. 
+
+\lstinputlisting[
+	style=c,
+	language=qdsp,
+	caption = ~,
+	label={code:ex:mathoperation2}]
+	{pictures/codeSamples/mathoperation2.qdsp}
+	
+It is worth to mention that adding five times two in the way it is done in \myref{example}{code:ex:mathoperation2} is bad, taking into account that the compiler does not do any precompiling, and therefore this will result in a micro code that makes the QDSP actually multiplicity tow and five. The better way would be to just add ten.
+
+\begin{savenotes}
+	\begin{table}[H]
+		\rowcolors{2}{table-gray}{}
+		\centering
+			\input{../includes/mathoperators}
+			\caption{Math operators}
+		\label{mathOperators}
+	\end{table}
+\end{savenotes}
+
+
+\section{Functions}\label{programmingLanguage_functions}
+It is not possible to create your own functions, but the programing language consists of a small amount of predefined functions, that can be used doing the programming. Words written in Italic, is a reference to a data format, see \secref{programmingLanguage_DataFormats}
+
+\subsection{sleep}
+\mono{void sleep(CPUclocks)}
+
+The sleep function creates a number of NOP operations in the micro code, stalling the processor for the amount of clocks given. It is not a good choice for long sleeps, because every NOP operation added, uses space in the program memory. It is often better to make a loop using a counter variable.
+
+\textbf{Takes:} A \textit{number} of clocks to sleep.
+
+\subsection{runBootLoader}
+\mono{void runBootLoader()}
+
+The runBootLoader function is only used then the QDSP is set to be run time programmable see \secref{programmingLanguage_runtime}. This gives the programmer the ability to determine then the QDSP will run the few instructions making it possible to stop and program the QDSP from a computer. It is important that this function is called frequently for the run time functionality to work. it is therefore important to add the \mono{runBootLoader()} command inside the \mono{while(true)} in the case seen in \myref{example}{code:ex:structure2}.
+
+\subsection{while}
+\mono{void while(\textit{boolean})\{ code \}}
+
+The while function creates jumps and branches in the micro code, with the result that the given code runs as long as the expression it true. 
+
+ \lstinputlisting[
+	style=c,
+	language=qdsp,
+	caption = ~,
+	label={code:ex:while1}]
+  {pictures/codeSamples/while1.qdsp}
+
+\lstinputlisting[
+	style=c,
+	language=qdsp,
+	caption = ~,
+	label={code:ex:while2}]
+  {pictures/codeSamples/while2.qdsp}
+
+\subsection{do while}
+\mono{void do\{ code \} while(\textit{boolean})}
+
+The do while function creates jumps and branches in the micro code, to ensuring that the given code is running at least one time, and continues as long as the expression it true. 
+
+\lstinputlisting[
+	style=c,
+	language=qdsp,
+	caption = ~,
+	label={code:ex:do}]
+  {pictures/codeSamples/do.qdsp}
+
+\subsection{for}
+\mono{void for(\textit{Assignment operation} ; \textit{boolean} ; \textit{Assignment operation})\{ code \}}
+
+The while function executes the first assignment operation. Afterward jumps and branches are created in the micro code, so the given code is running as long as the expression it true. The last assignment operation is added to the code.
+
+\lstinputlisting[
+	style=c,
+	language=qdsp,
+	caption = ~,
+	label={code:ex:for}]
+  {pictures/codeSamples/for.qdsp}
+	
+\subsection{if}
+\mono{void if(\textit{boolean})\{ code \} else if(\textit{boolean})\{ code \} else \{ code \}}
+
+The if function creates jumps and branches in the micro code, to obtain that the given code is running if the expression it true. The number of else if expressions is up to the programmer, and the else expression is optional.
+
+\lstinputlisting[
+	style=c,
+	language=qdsp,
+	caption = ~,
+	label={code:ex:if}]
+  {pictures/codeSamples/if.qdsp}
+	
+\subsection{switch case}
+\mono {void switch \textit{Math operation} \{ case \textit{number} or \textit{constant} : code \}}
+
+The switch case function, executes the \textit{Math operation} and runs the code from the specified case with the right result. If a case with the right result does not exist, the default is used. To stop the code at the end of a case, the break command is used. 
+
+\lstinputlisting[
+	style=c,
+	language=qdsp,
+	caption = ~,
+	label={code:ex:switch}]
+  {pictures/codeSamples/switch.qdsp}
+	
+\subsection{trunctate16}
+\mono{trunctate16(\textit{Math operation})}
+
+The trunctate16 function, executes the \textit{Math operation}, and fits the result into a 16 bit value. If the result is grater than the max value of a 16 bit number (65535) the output of this function will be 65535, else the output will be the result of the \textit{Math operation}.
+
+\subsection{min}
+\mono{min(\textit{Math operation} , \textit{constant} or \textit{variable} or \textit{number})}
+
+The min function will return the minimum value of the two inputs.
+
+\subsection{max}
+\mono{max(\textit{Math operation} , \textit{constant} or \textit{variable} or \textit{number})}
+
+The max function will return the maximum value of the two inputs.
+
+\section{Run time programming the QDSP}\label{programmingLanguage_runtime}
+The run time programming functionality, is designed to utilize the existing computer interface of the QDSP, was added to allow for the run-time programming the program memory, allowing for faster iterations on the code running on the DSP. The run time programming functionality is by default disabled, but can be enabled in the configuration. 
+
+The QDSP can be programed in two ways, using the Python programing script generated by the compiler, or by using the programing interface.
+
+\subsection{Python programing script}
+The python script requires Python3 and PySerial\footnote{\url{http://pythonhosted.org/pyserial/}} in order to run. The script takes three arguments, the file to send, the port and the baud rate. The latter two are optional as the script asks for a port if none is given and uses a default baud rate.
+
+The script can be called from within Eclipse by creating an external tool configuration and adding a program, by using the following parameters:
+%\begin{table}%
+
+\begin{tabular}{ll}
+	Location: & location of python \\
+	Working Directory: & \${workspace\_loc:/''project name''/src-gen} \\
+	Arugments: & qdspProgrammer.py -p ``serial port'' -b ``baud rate'' ''project name''.bin
+\end{tabular}
+%\caption{}
+%\label{}
+%\end{table}
+
+ 
+
+
+\subsection{Programing interface}
+The programming interface was devised so it allowed for the programming of individual parts of the program and heap memory, as well as validation of the functionality of the device before programming in started. The interface uses four registers in on either µTosnet of Unity-Link, two to write data and two to receive. The complete command list can be seen in \tabref{tab:registers}.
+
+\begin{table}[H]
+	\centering
+		\input{../includes/controlregistertable}
+		\caption{List of commands used in the program loader.}
+		\label{tab:registers}
+\end{table}
+
+
+The control and status registers uses the structure defined in \tabref{tab:controlregisters}, that allows extra data to be transmitted along side the command, and the Data-in and -out allows for the transmission of data to the DSP. The Start and Stop loaders commands are used to inform the DSP to go into the programming state. when the programming state is entered the is returned in the status register, but as the loader is stopped when a stop loader command is sent, not change on the status register is possible.
+
+\begin{table}[H]
+	\centering
+		\input{../includes/controlstructuretable}
+		\caption{Structure of control and Status registers.}
+		\label{tab:controlregisters}
+\end{table}
+
+The read program and read heap commands uses the address provided in the control data area to return the address and data of a given memory area.
+When writing a new program to the DSP first the validation must be performed, until that is done the loader is in a read only state. This is done by transmitting a validation command along with a feature key, this feature key is a on-hot encoding of all the instructions required by the code, and a validation key, which structure can be seen in \tabref{tab:validationkey}. These keys are validated on the DSP and the results are returned. If the validation was successful the read-only flag is removed allowing for the programming of the DSP.
+
+\begin{table}[H]
+	\centering
+		\input{../includes/validationkeystructuretable}
+		\caption{Structure of the validation key and result.}
+		\label{tab:validationkey}
+\end{table}
+
+The write program and heap commands requires the address that is to be written along side the data, when that is received the data is stored in the memory and the new address and data value is returned, allowing for validation of the written data.

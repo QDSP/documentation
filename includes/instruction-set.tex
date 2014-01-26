@@ -1,0 +1,27 @@
+\begin{tabular}{c|c|p{8cm}}
+	\textbf{Name} & \textbf{Argument} & \textbf{Description} \\ \hline
+	NOP & N/A & No Operation \\ 
+	CAH & Heap address & Copy accumulator to heap\\ 
+	CHA & Heap address & Copy heap value to accumulator\\ 
+	RST & N/A & Reset program counter to 0 \\ 
+	LDX & N/A & Test if program loader is requested on memory interface\\ 
+	CAS & Memory address & Copy accumulator to shared memory \\ 
+	CSA & Memory address & Copy shared memory value to accumulator \\ 
+	CAI & Memory address & Copy accumulator to IO memory\\ 
+	CIA & Memory address & Copy IO memory value to accumulator\\ 
+	ADD & Heap address & Add Heap to accumulator \\ 
+	SUB & Heap address & Subtract heap from Accumulator\\ 
+	BDIV & Shift count & Signed binary division using bit shifting\\ 
+	BMUL & Shift count & Signed binary multiplication using bit shifting\\ 
+	MUL & Heap address & Multiply Heap with accumulator\\ 
+	TRN & N/A & Truncate accumulator to 16bit value\\ 
+	MAX & Heap address & Compares accumulator to heap value and set accumulator to the highest of the two\\ 
+	MIN & Heap address & Compares accumulator to heap value and set accumulator to the smallest of the two\\ 
+	LSH & Shift count & Left shifts accumulator the given amount\\ 
+	RSH & Shift count & Right shifts accumulator the given amount\\ 
+	JMP & Program memory address & Changes program counter to specified program memory address\\ 
+	BRE & Program memory address & Changes program counter to specified program memory address, based on compare flags\\ 
+	BRG & Program memory address & Changes program counter to specified program memory address, based on compare flags\\ 
+	BRL & Program memory address & Changes program counter to specified program memory address, based on compare flags \\ 
+	CMP & Heap address & Compares heap value with accumulator and set compare flags based on the results\\ 
+\end{tabular}

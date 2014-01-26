@@ -1,0 +1,10 @@
+define in1 	IO[1]
+define in2 	IO[1]
+define out1	IO[4]
+var var1
+const const1 = 10
+
+var1 = 5
+var1 += const1 + in1 - in2
+var1 ++
+out1 = var1

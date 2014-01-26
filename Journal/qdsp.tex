@@ -1,0 +1,47 @@
+\documentclass[a4paper,10pt,oneside]{memoir}
+\input{../includes/style.tex}
+\setcounter{tocdepth}{1}
+\AtBeginDocument{
+	\numberwithin{figure}{section}
+	\numberwithin{equation}{section}
+	\numberwithin{table}{section}
+	\numberwithin{lstlisting}{section}}
+\pdfminorversion=6
+%\includeonly{sections/design}
+
+\begin{document}
+\setcounter{page}{0}
+\include{frontpage}
+
+\tableofcontents*
+
+
+
+\include{sections/Introduction}
+\include{sections/design}
+\include{sections/implementation}
+\include{sections/testing}
+\include{sections/Conclusion}
+
+%\bibliographystyle{IEEEtran}
+%\bibliography{ref}
+
+\appendix
+
+\chapter{Instruction-set}
+\label{app:instruction-set}
+\begin{table}[h]
+	\rowcolors{2}{table-gray}{}
+	\centering
+		\input{../includes/instruction-set}
+\end{table}
+
+\chapter{Testing result}
+\label{app:testresults}
+  \begin{figure}[ht]
+	\centering
+	\includegraphics[width=\textwidth]{pictures/results.pdf} 
+	%\caption{Results from test-bench descriped in \secref{sec:testing}}
+  \end{figure}
+
+\end{document}

@@ -1,0 +1,10 @@
+var v = IO[1]
+switch v {
+	case 1:
+		//code
+		break
+	case 2:
+		//code
+	default:
+		//code
+}

@@ -1,0 +1,51 @@
+\begin{minipage}{\textwidth}
+\tikzset{->-/.style={decoration={markings,mark=at position 0.5 with {\arrow{>}}},postaction={decorate}}}
+\newcommand{\tikzmark}[1]{\tikz[overlay,remember picture,baseline=-1.567mm] \node (#1) {};}
+\newcommand{\tikzhighlight}[3][white]{\fill [#1] (#2.north -| 0.1cm,0) rectangle (#3.north -| 15.05cm,0) ;}
+\newcommand{\tikzjumpline}[3] {\draw[->] ([yshift=1.5mm]#1.north -| 0.1cm,0) to [#3] ([yshift=-2mm]#2.north -| 0.1cm,0);}
+\newcommand{\tikzjumplinedown}[3][30]{\tikzjumpline{#2}{#3}{bend right=#1}}
+\newcommand{\tikzjumplineup}[3][30]{\tikzjumpline{#2}{#3}{bend left=#1}}
+
+\lstinputlisting[
+	style=vhdl,
+	%language=qdsp,
+	escapeinside={\%*}{*)},
+	caption = Example of code blocks and associated jumps ,
+	label={code:optimizer:grouping}]
+  {pictures/codeSamples/areas.qdsp}
+
+\begin{tikzpicture}[overlay,remember picture,fill opacity=0.1]
+	\tikzhighlight{0}{7}
+	\tikzhighlight[]{7}{12}
+	\tikzhighlight{12}{13}
+	\tikzhighlight[]{13}{17}
+	\tikzhighlight{17}{20}
+	\tikzhighlight[]{20}{25}
+	\tikzhighlight{25}{29}
+	\tikzhighlight[]{29}{34}
+	\tikzhighlight{34}{40}
+	\tikzhighlight[]{40}{43}
+	\tikzhighlight{43}{49}
+	\tikzhighlight[]{49}{51}
+	\tikzhighlight{51}{52}
+	\tikzhighlight[]{52}{53}
+	
+	\tikzjumplinedown{7}{7}
+	\tikzjumplinedown{12}{12}
+	\tikzjumplinedown{12}{13}
+	\tikzjumplinedown{13}{17}
+	\tikzjumplinedown{17}{20}
+	\tikzjumplinedown{20}{20}
+	\tikzjumplinedown{25}{29}
+	\tikzjumplineup{34}{25}
+	\tikzjumplinedown{34}{34}
+	\tikzjumplinedown{40}{40}
+	\tikzjumplinedown{40}{43}
+	\tikzjumplinedown{43}{51}
+	\tikzjumplinedown{49}{51}
+	\tikzjumplinedown{49}{49}
+	\tikzjumplinedown{51}{51}
+	\tikzjumplineup[20]{52}{7}
+	 
+\end{tikzpicture}
+\end{minipage}

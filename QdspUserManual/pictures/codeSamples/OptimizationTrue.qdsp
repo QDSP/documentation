@@ -1,0 +1,5 @@
+CIA & A(1), 		-- Setting address to 1
+NOP & A(0), 		-- Do Nothing
+CIA & A(0), 		-- Copy IO memory address 1 to accumulator, address set in line [0]
+CAS & A(1), 		-- Copy accumulator to SH memory address 1
+RST & A(0), 		-- Resets program counter to 0

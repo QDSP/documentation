@@ -1,0 +1,4 @@
+define  input	IO[1]
+define output	SH[1]
+
+output = input

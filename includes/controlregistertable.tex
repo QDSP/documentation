@@ -1,0 +1,12 @@
+	\begin{tabular}{c||cc|c||cc|c}
+		\textbf{Name} & \multicolumn{3}{c||}{\textbf{Transmit}} & \multicolumn{3}{c}{\textbf{Receive}}\\
+		& \multicolumn{2}{c|}{\textbf{Control}} & \textbf{Data-Out} & \multicolumn{2}{c|}{\textbf{Status}} & \textbf{Data-In} \\ \hline
+		%& \textbf{Command} & \textbf{Data} &  & \textbf{Command} & \textbf{Data} & \\ 
+		start loader & 0x81 & N/A & N/A & 0x81 & N/A & N/A\\
+		stop loader & 0x82 & N/A & N/A & N/A & N/A & N/A\\
+		write program & 0x83 & Address & program data & 0x83 & Address & program data\\
+		read program & 0x84 & Address & N/A & 0x84 & Address & program data \\
+		write heap & 0x85 & Address & heap data & 0x85 & Address & heap data\\
+		read heap & 0x86 & Address & N/A & 0x86 & Address & heap data \\
+		validate device & 0x87 & Feature key & Validation key & 0x87 & Feature result & Validation result \\
+	\end{tabular}

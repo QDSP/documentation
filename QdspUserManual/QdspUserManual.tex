@@ -1,0 +1,29 @@
+\documentclass[a4paper,10pt,oneside]{memoir}
+\input{../includes/style.tex}
+\renewcommand{\lstlistingname}{Example}
+\setcounter{tocdepth}{2}
+\AtBeginDocument{
+	\numberwithin{figure}{section}
+	\numberwithin{equation}{section}
+	\numberwithin{table}{section}
+	\numberwithin{lstlisting}{section}}
+\pdfminorversion=6
+\begin{document}
+\setcounter{page}{0}
+\include{frontpage}
+\tableofcontents*
+
+\input{sections/GettingStarted}
+
+\input{sections/QDSP}
+
+\input{sections/ProgramingLanguage}
+
+\input{sections/Optimization}
+
+\input{sections/revisionTable}
+
+
+%\bibliographystyle{IEEEtran}
+%\bibliography{ref}
+\end{document}

@@ -1,0 +1,16 @@
+	\begin{tabular}{c|c|c|l}
+		\textbf{Start} & \textbf{Size[Byte]} & \textbf{Name} & \textbf{Description} \\ \hline
+		0 & 1 & HS & Size of header\\ 
+		1 & 1 & CA & Control Address \\ 
+		2 & 1 & OA & Data-Out Address \\ 
+		3 & 1 & IA & Data-In Address \\ 
+		4 & 1 & SA & Status Address \\ 
+		5 & 1 & PCL & Program Code Length \\ 
+		6 & 2 & HC & Heap Count \\ 
+		8 & 2 & PC & Program Count \\ 
+		10 & 6 & FK & Feature Key \\ 
+		16 & 8 & VK & Validation Key \\
+		$HS$ & $5 \cdot HC$ & HD & Heap Data \\
+		$HS + 5 \cdot HC$ & $PCL \cdot PC$ & PD & Program Data \\
+		
+	\end{tabular}

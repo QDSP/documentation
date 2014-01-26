@@ -1,0 +1,8 @@
+var v = IO[1]
+if(v == 1){
+	//code
+} else if(v >= 2){
+	//code
+} else {
+	//code
+}

@@ -1,0 +1,3 @@
+const offset = 256
+
+SH[1] = IO[1] + offset

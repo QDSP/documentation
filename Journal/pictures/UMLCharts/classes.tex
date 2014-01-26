@@ -1,0 +1,138 @@
+\begin{tikzpicture} 
+\tikzumlset{font=\tiny}
+
+	%{- myid : int	} 
+	%{
+		%ADDInstruction(heapelement : HeapElement) \\
+		%#setId(id : int) : void \\
+		%#getStaticID() : int \\
+		%#getStaticDefaultID() : int \\
+		%#getStaticInstructionName() : string \\
+		%getId() : int \\
+		%getInstructionName() : string \\
+		%getComment() : string \\
+	%}
+	
+
+
+
+
+
+
+
+
+
+
+\umlclass[anchor=north]{QdspGenerator}{}{}
+
+\umlclass[below right=0.5 and 3 of QdspGenerator.south east, anchor=north west]{Instruction}{}{}
+
+
+
+
+\umlclass[below=0.5 of Instruction.south, anchor=north]{JumpInstruction}{}{}
+\umlsimpleclass[below left=2.16 and 0.2 of JumpInstruction.south, anchor=north east]{BREInstruction}{}{}
+\umlsimpleclass[below=0.1 of BREInstruction.south, anchor=north]{BRGInstruction}{}{}
+\umlsimpleclass[below=0.1 of BRGInstruction.south, anchor=north]{BRLInstruction}{}{}
+\umlsimpleclass[below=0.1 of BRLInstruction.south, anchor=north]{JMPVInstruction}{}{}
+
+\umlHVinherit[]{BREInstruction}{JumpInstruction} 
+\umlHVinherit[]{BRGInstruction}{JumpInstruction} 
+\umlHVinherit[]{BRLInstruction}{JumpInstruction} 
+\umlHVinherit[]{JMPVInstruction}{JumpInstruction} 
+
+\umlclass[left=1.5 of JumpInstruction.north west, anchor=north east]{HeapInstruction}{}{}
+\umlclass[below left=0.5 and 0.2 of HeapInstruction.south, anchor=north east]{HeapReadInstruction}{}{}
+
+\umlsimpleclass[below left=0.5 and 0.2 of HeapReadInstruction.south, anchor=north east]{ADDInstruction}{}{}
+\umlsimpleclass[right=0.4 of ADDInstruction.north east, anchor=north west]{CHAInstruction}{}{}
+\umlsimpleclass[below=0.1 of ADDInstruction.south, anchor=north]{CMPInstruction}{}{}
+\umlsimpleclass[below=0.1 of CHAInstruction.south, anchor=north]{MAXInstruction}{}{}
+\umlsimpleclass[below=0.1 of CMPInstruction.south, anchor=north]{MINInstruction}{}{}
+\umlsimpleclass[below=0.1 of MAXInstruction.south, anchor=north]{MULInstruction}{}{}
+\umlsimpleclass[below=0.1 of MINInstruction.south, anchor=north]{SUBInstruction}{}{}
+
+\umlHVinherit[]{ADDInstruction}{HeapReadInstruction} 
+\umlHVinherit[]{CHAInstruction}{HeapReadInstruction} 
+\umlHVinherit[]{CMPInstruction}{HeapReadInstruction} 
+\umlHVinherit[]{MAXInstruction}{HeapReadInstruction} 
+\umlHVinherit[]{MINInstruction}{HeapReadInstruction} 
+\umlHVinherit[]{MULInstruction}{HeapReadInstruction} 
+\umlHVinherit[]{SUBInstruction}{HeapReadInstruction} 
+
+\umlsimpleclass[right=0.4 of HeapReadInstruction.north east, anchor=north west]{CAHInstruction}{}{}
+
+\umlVHVinherit[arm2=-0.9cm]{HeapReadInstruction}{HeapInstruction} 
+\umlVHVinherit[arm2=-0.9cm]{CAHInstruction}{HeapInstruction} 
+
+\umlclass[right=5 of JumpInstruction.north east, anchor=north west]{MemoryInstruction}{}{}
+
+\umlclass[below left=0.5 and 0.2 of MemoryInstruction.south, anchor=north east]{MemoryReadInstruction}{}{}
+\umlsimpleclass[below right=0.5 and 0.2 of MemoryReadInstruction.south, anchor=north west]{CIAInstruction}{}{}
+\umlsimpleclass[below=0.1 of CIAInstruction.south, anchor=north]{CSAInstruction}{}{}
+\umlHVinherit[]{CIAInstruction}{MemoryReadInstruction} 
+\umlHVinherit[]{CSAInstruction}{MemoryReadInstruction} 
+
+
+\umlclass[right=0.4 of MemoryReadInstruction.north east, anchor=north west]{MemoryWriteInstruction}{}{}
+\umlsimpleclass[below right=0.5 and 0.2 of MemoryWriteInstruction.south, anchor=north west]{CAIInstruction}{}{}
+\umlsimpleclass[below=0.1 of CAIInstruction.south, anchor=north]{CASInstruction}{}{}
+\umlHVinherit[]{CAIInstruction}{MemoryWriteInstruction} 
+\umlHVinherit[]{CASInstruction}{MemoryWriteInstruction}
+
+\umlVHVinherit[arm2=-0.9cm]{MemoryReadInstruction}{MemoryInstruction} 
+\umlVHVinherit[arm2=-0.9cm]{MemoryWriteInstruction}{MemoryInstruction} 
+
+
+\umlsimpleclass[below right=2.16 and 1.5 of JumpInstruction.south, anchor=north]{BMULInstruction}{}{}
+\umlsimpleclass[below=0.1 of BMULInstruction.south,anchor=north]{BDIVInstruction}{}{}
+\umlsimpleclass[below=0.1 of BDIVInstruction.south,anchor=north]{LDXLInstruction}{}{}
+\umlsimpleclass[below=0.1 of LDXLInstruction.south,anchor=north]{LSHLInstruction}{}{}
+
+\umlsimpleclass[right=0.4 of BMULInstruction.north east,anchor=north west]{NOPLInstruction}{}{}
+\umlsimpleclass[below=0.1 of NOPLInstruction.south,anchor=north]{RSHLInstruction}{}{}
+\umlsimpleclass[below=0.1 of RSHLInstruction.south,anchor=north]{RSTLInstruction}{}{}
+\umlsimpleclass[below=0.1 of RSTLInstruction.south,anchor=north]{TRNLInstruction}{}{}
+
+\umlinherit[geometry=|-|, name=assoc,arm2=-0.9cm]{JumpInstruction}{Instruction}
+\umlinherit[geometry=|-|, name=assoc,arm2=-0.9cm]{HeapInstruction}{Instruction}
+\umlinherit[geometry=|-|, name=assoc,arm2=-0.9cm]{MemoryInstruction}{Instruction}
+\umlassoc[geometry=-|-, arm1=.2, anchors=east and 0,name= line]{BMULInstruction}{assoc-4}
+\umlassoc[geometry=-|]{BDIVInstruction}{line-4}
+\umlassoc[geometry=-|]{LDXLInstruction}{line-4}
+\umlassoc[geometry=-|]{LSHLInstruction}{line-4}
+
+\umlassoc[geometry=-|]{NOPLInstruction}{line-4}
+\umlassoc[geometry=-|]{RSHLInstruction}{line-4}
+\umlassoc[geometry=-|]{RSTLInstruction}{line-4}
+\umlassoc[geometry=-|]{TRNLInstruction}{line-4}
+
+
+
+\umlclass[below left=0.5 and 1.5 of QdspGenerator.south west, anchor=north east]{Heap}{}{}
+\umlclass[below= 0.5 of Heap.south, anchor=north]{HeapElement}{}{}
+
+\umlsimpleclass[below left=0.5 and 0.2 of HeapElement.south, anchor=north east]{HeapConstant}{}{}
+\umlsimpleclass[below=0.1 of HeapConstant.south,anchor=north]{HeapSysVariable}{}{}
+\umlsimpleclass[below=0.1 of HeapSysVariable.south,anchor=north]{HeapVariable}{}{}
+
+\umlinherit[geometry=-|]{HeapConstant}{HeapElement}
+\umlinherit[geometry=-|]{HeapSysVariable}{HeapElement}
+\umlinherit[geometry=-|]{HeapVariable}{HeapElement}
+
+\umlassoc[attr1=heapelement|1, align1=left,pos1=0.01, attr2=instructions|*, align2=left,pos2=0.55]{HeapElement}{HeapInstruction} 
+\umlassoc[attr1=heap|1, attr2=elements|*]{Heap}{HeapElement} 
+
+\umlHVassoc[attr2=heap|1,pos2=1.9]{QdspGenerator}{Heap} 
+
+\umlHVassoc[attr2=instructions|*,pos2=1.9]{QdspGenerator}{Instruction}
+
+\end{tikzpicture}
+
+%\begin{tikzpicture} 
+%\umlsimpleclass{A} 
+%\umlemptyclass[below left=2cm and 2cm of A, anchor=north]{B} 
+%\umlclass[right=4cm of B.north, anchor=north]{C}{i : int \\ r : double}{} 
+%\umlVHVinherit[arm2=-1.2cm]{B}{A} 
+%\umlVHVinherit[arm2=-1.2cm]{C}{A} 
+%\end{tikzpicture}

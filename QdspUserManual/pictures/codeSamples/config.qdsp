@@ -1,0 +1,5 @@
+config{
+	ProjectTitle = robotrainer
+	EnableOptimization = false
+	SHInterfaceType = Unity-Link
+}

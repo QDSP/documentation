@@ -1,0 +1,124 @@
+\chapter{Implementation}
+\section{Compiler}
+As xtext was the chosen development framework, the compiler was written in a combination of Java and xtend, a language that extends java with new functionality but at the same time removes others. 
+\subsection{Structure}
+With and object oriented development environment, several options on how to decode and handle data presents itself:
+\\ \textbf{Simple structure}
+
+A simple structure where the instructions are stored as a list of similar objects containing the instruction name and argument. This has the advantage of being simple and fast to create but it does not utilize the all the features of the programming language, and makes it harder to add functionality to the code.
+\\ \textbf{Inherited structure}
+
+In an inherited structure a class is created for each instruction and abstract classes are created to represent the various features of instructions. The advantage of this structure is that it allows for easier identification of the instruction type and data specific to that type can be stored on the class. It also allows for easier addition of new instructions as the surrounding structure utilizes the highest level of the code it needs. The disadvantages are that it requires more analysis when starting the design, as it is essential to get meaningful parent classes. 
+\\ \textbf{Interface structure}
+
+The interface structure is very similar to the inherited structure in that it utilizes the underlying language well but instead of parent classes, interfaces are used. The main difference between the two is that a class would be able to more than one interface, but not have the same data structures on the parent class.
+\subsubsection{implemented structure}
+The structure chosen in this case was the inherited structure, as the ability store data on the higher levels will be useful for linking data, and the grouping of instructions makes the optimizer simpler, more robust, and more general. An overview of the structure of the code can be seen in \figref{fig:classdiagram}. 
+
+
+\begin{figure}[H]
+	\centering
+		\scalebox{0.7}{\input{pictures/UMLCharts/classes}}
+		\caption{Diagram showing the structure of the generator}
+		\label{fig:classdiagram}
+\end{figure}
+
+The main grouping of instructions are into heap instructions that are used for instructions that access the heap, and each heap instruction has a link to the heap element that identifies where on the heap the data is stored, and the type of data stored there. The memory instructions that identify the memory type accessed and whether it is a read or write operation. The jump instruction that stores where a jump operation comes from and goes to.
+
+The heap structure allows for a reuse creation of temporary variables, refereed to as system variables, that can be used by several operations, and these can be claimed and released, allowing for an optimization on the use of the variables. The heap elements also keeps track of what instructions are referring to it, allowing for the optimization of the fetches from the heap.
+
+The compilation of the code is separated in three distinct processes. First the language is decoded into the structure of instructions and heap elements, then an optimization is run on the generated instructions, finally the output files are generated.
+
+
+\subsection{Decoder}
+The main functionality for the decoder is to translate the written program into a list of of micro instructions. The list consists of the different instruction objects all inheriting from the instruction class. This allows the different instructions to contain the needed information for the current instruction. 
+
+An example of a program are seen in \coderef{code:decoder:example}. This small program drives four LEDs  switching them on and of so that the light runs up and down. The diodes are mapped the IO addres 4 pin 19 to 22.
+
+\lstinputlisting[
+	style=vhdl,
+	%language=qdsp,
+	escapeinside={\%*}{*)},
+	caption = Example of code,
+	label={code:decoder:example}]
+  {pictures/codeSamples/areacode.qdsp}
+	
+The decoder loops through the code lines, and uses the multiple dispatch principle made ​​possible in xtend, to separate the various types of lines, and thereby call the right function handling the specific line of code. The handling of the various types are further described in the subsections below. The decoder is written in a recursive way, that allows all the function handlers to call each other and themselves.
+
+The way that the decoder looks at the code, \coderef{code:decoder:example} consists of 7 lines of code in the first iteration. Namely the first 6 lines, and the \mono{while} at line 8. The code inside the \mono{while} is handed by the \mono{while} function handler in the second iteration. The first 5 lines creates variables, constants, and defines. Line 6 is a instruction setting the LED defined in line one to 0. 
+
+\subsubsection{Math decoder}
+The math handler, is not used directly by the handler in first iteration, but is used by the other handlers to handle a math operation. An example of a math operation can be seen in \coderef{code:decoder:example} line 10 where the instruction has a bit shift operation. \\
+
+The math contains both functions and mathematical operation and is analyzed from behind to find the last function, address, or instance of define. A parenthesis is implemented as a function that can be used inside math operations like the \mono{truncate16()}, \mono{max()}, and \mono{min()}. When the last function or parenthesis is found, the function is handled, and all the skipped operations are executed and the micro instructions are added to the instruction list. This makes it possible to guarantee that functions and parenthesis are executed before the mathematical operations, and the values from the addresses to be loaded. The partial result is then stored in a variable declared by the decoder, that now contains the last part of the math. The process contentious until all elements in the math have been executed.
+
+\subsubsection{Instruction decoder}
+The main part of the code will often be instructions, which allows the use of assignment operators to assign values and other data formats to variables, addresses, and defines.\\
+
+If the instruction is a increment (++) or decrement ({-}-) instruction, the instruction decoder adds the micro instruction to load the variable to the accumulator, and the creates a math operation to add or subtract 1. The math decoder is then used to decode it to the right micro instructions.
+
+If the instruction is an assignment instruction the math decoder is called to decode the math operation, that afterwards are assigned to the given variable by adding the micro instruction to store the accumulator to the give address on the heap. At last the assignment instruction can have a argument. In that case the given result variable is added in the front of the math with a math operator according the argument.
+
+\subsubsection{Variable decoder}
+The variable decoder is used when a variable is declared. It calls the add element on the heap class, that creates a new heap element. During declaration of a variable, it is possible to assign a value or a math operation directly to the variable. If there is assigned a value it it set in the heap element. If a math operation is assigned the math decoder is used to add the micro instructions to the instruction list so the QDSP executes the math and the micro instruction to store the accumulator to given heap address is added.
+
+\subsubsection{Constant decoder}
+The constant decoder adds a heap element on the heap class with the value of the constant, then a constant is declared. 
+
+\subsubsection{Function decoder}
+The function decoder is once again using the multiple dispatch principle for breaking the code handling the different functions into different parts. The most of the functions maps directly to a single micro instruction, the decoding of these are therefore relatively simple, the micro instruction is added to the instruction list, with the parameters given in the used function. The functions creating jumps such as \mono{if()} or the various loop functions uses branch and jump instructions to control the flow of the code on the QDSP. These are more complicated to decode, and are explained beneath.\\
+
+\textbf{If Switch}
+
+The \textit{if} and \textit{switch} functions uses the same principles, and are almost similar. Therefore only the \textit{if} functions is described in details.
+
+The if function decoder again uses the math decoder to decode the to math expressions in the brackets, storing the first a variable, and keeps the last on the accumulator. Afterwards the micro instructions to compare and branch and jump to end of the code inside the \mono{if()} are added. it constantly keeps track of the positions in the micro instructions for the code blocks, so its possible to jump over the code if the branch tells it to. All the \textit{else if} statements are handled the same way.
+
+A jump instruction is created in the start and added to the instruction list in the end of every \textit{if} or \textit{else if} statement, ensuring that the \textit{else if} only are valuate if the first statement is false. The same count for a \textit{else}. At the end them all the micro instruction is added, and the end position for the whole \textit{if, else if, else} statement is known, the value for the initially created jump instruction is set.\\
+ 
+\textbf{Loop functions}
+
+The three loop functions implemented are all decoded by the same decoder. If the Boolean value is true, the decoder just calls the instruction decoder with the instructions inside the loop, and adds a jump to the start of the loop. If the Boolean value is false the instructions inside the loop is skipped. 
+
+If the loop function contains a Boolean expression, if the function is a \textit{while} or a \textit{for} a jump instruction is added followed by the instructions for the code inside the loop. The value for the jump instruction is then set to jump over the code. If the function is a \textit{do} the jump instruction is ignored. This allows the Boolean expression to be evaluated in the end of the loop, for all three types. The micro instructions for the evaluation of the expression is the added, and a branch and jump instruction is used to determine if the code loops. 
+
+\subsection{Optimizer}
+
+When starting the optimization of the instructions generated by the decoder, the code is separate into blocks based on jumps created in the code. Each blocks keep track what blocks lead jump to it, and what block it jumps to. This allows the optimizer ensure that removing an instruction does not make unexpected changes to other code paths. This is achieved by iterating over the entire list of instructions and determining if they are instances of jump instructions, and splitting the existing blocks based on the jump destinations. An example of the code blocks generated and the jumps associated can be seen in \coderef{code:optimizer:grouping} this is generate from the program found in \coderef{code:decoder:example}. When ever an instruction is optimized away the groups are updated to reflect the change.
+
+The optimization is run i several stages and parts to try and get a structure that is easily maintained and robust. The first step that is done is to try and optimize the blocks that have been found, this means taking all the blocks that have more that two or more blocks jumping to it, and determining if they all end with the same instruction. If this is the case the instructions are removed from all the parent blocks and added to the start of the child block, this is repeated until there is a difference in one of the blocks. This is the first and simplest level of the optimization, the next part runs through all the instructions and evaluate whether or not they can be removed. Based on the instruction type it is processed through one of three methods Optimize Memory Read, Accumulator or Heap Loads, which will be described in greater detail below.
+
+\subsubsection{Optimize Memory Read}
+Tries to consolidate the use of memory read instructions by setting the memory address of the read instruction in an unused previous memory read, as memory reads requires takes more than one clock cycle. 
+
+The process iterates back from the instruction to determine if any previous instructions allow for the the removal of the initial memory read of the instruction. If a memory write to the same memory type or a memory read that requires a different address is found before a free memory read, the iteration path is blocked, and the instruction is not optimized away. In the case that the reverse iteration hits the start of the block before finding any valid memory reads, each block is evaluated using the same rules as for the first block and the result for the block is stored. This allows the optimization to iterate back through all execution paths and ensure that they all allow for the optimization of the instruction before it is done.
+
+\subsubsection{Optimize Accumulator}
+Tries to remove unnecessary loads of data from the memory to the accumulator, which occurs when a value from f.x. a calculation is stored to a variable and used in the next calculation as well. 
+
+The process iterates back from the instruction to determine if the load from memory is needed or if the accumulator will have the correct value. Just like the memory read optimization it iterates back through the blocks parent if no instructions that affect the accumulator is found in the current block.
+
+\input{pictures/optimizergroups}
+
+\subsubsection{Optimize Heap}
+Tries to remove unnecessary writes and reservations of heap elements, this is a twofold process one that is run during the incremental processing of the instructions, which removes unnecessary system variables by determining if they are used before being overwritten by another instruction. And a process that runs after all other optimization has completed to ensure that no data is placed on the heap if it is never read.
+
+The first of the two parts iterates forwards from the instruction and sees if the heap element is used by before it gets over written, this like the two previous operations traverses the blocks that follows the to ensure that no instruction is removed unintentionally.
+
+The second part of this optimization runs through all the instructions from an end, and for every write to the heap, it ensures that the heap address is read again at any point in the code, this is achieved by iteration over all of the code a second time from the start to ensure that even if the code loops the instruction can be read.
+
+
+\subsection{Generator}
+When the instructions have been decoded and if need be optimized, the output files are generated. These consist of a VHDL file containing the entire QDSP with instructions, and a file containing only the decoded instruction list. In the case that run-time programming has been enabled two more files are created, a binary file containing the program data to be written, and a python script that can program the DSP. 
+
+\subsubsection{VHDL file}
+The VHDL file generated contains the entire DSP, with a fully populated program memory and heap. The instruction-set of the DSP is optimized to only contain the needed instructions an only with the heap and program memory sizes needed to contain the program. If the DSP is configured to be run-time programmable the entire instruction-set is implemented and the size of the heap and program memory can be configured.
+
+\subsubsection{Binary file}
+The binary file is generated based on the file structure defined in \secref{sec:design:binaryfile} and the configuration parameters set in the program.
+
+\subsubsection{Python script}
+The Python script decodes the binary file generated and sends the heap and program data to the DSP via µTosNet or Unity-Link. The support for either µTosNet or Unity-Link depends on the configuration of the program as it adjusts the generated script.
+
+\section{Validator}
+In order to help users avoid making common errors validation code has been written that leverages Eclipse's syntax highlighting, that runs while the user types, in order to inform where errors or warnings are found. The validation return errors if the user tries to divide with a number that is not a power of two, uses the same name on several elements, or tries to write to a read only memory address. Less critical errors are highlighted with warnings these are, unused variables, variables used before they are assigned a value and if configuration parameters that are only used when run-time programmable are assigned when run-time programmable is not enabled.

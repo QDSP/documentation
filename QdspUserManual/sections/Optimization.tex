@@ -1,0 +1,29 @@
+\chapter{Optimization}
+Integrated in the QDSP DSL is a optimizer for optimizing the micro code generated for the QDSP. The optimizer tries to consolidate the use of memory read instructions by setting the memory address of the read instruction in an unused previous memory read, as memory reads requires takes more than one clock cycle. It also tries to remove unnecessary loads of data from the memory to the accumulator, which occurs when a value from f.x. a calculation is stored to a variable and used in the next calculation as well. lastly the optimizer tries to remove unnecessary writes and reservations of heap elements, this is a twofold process one that is run during the incremental processing of the instructions, which removes unnecessary system variables by determining if they are used before being overwritten by another instruction. And a process that runs after all other optimization has completed to ensure that no data is placed on the heap if it is never read.
+
+The optimizer is enabled by default, but can be disabled in the configuration. An example of a source code and the generated output both with and without optimization can be found beneath. 
+
+
+
+
+\lstinputlisting[
+	style=c,
+	language=qdsp,
+	caption = Source,
+	label={code:ex:OptimizationSource}]
+  {pictures/codeSamples/OptimizationSource.qdsp}
+	
+	
+\lstinputlisting[
+	style=vhdl,
+	caption = Without Optimization,
+	label={code:ex:OptimizationFalse}]
+  {pictures/codeSamples/OptimizationFalse.qdsp}
+	
+	
+\lstinputlisting[
+	style=vhdl,
+	caption = With Optimization,
+	label={code:ex:OptimizationTrue}]
+  {pictures/codeSamples/OptimizationTrue.qdsp}
+	

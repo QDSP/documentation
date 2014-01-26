@@ -1,0 +1,13 @@
+CIA & A(1), 		-- Setting address to 1
+NOP & A(0), 		-- Do Nothing
+CIA & A(0), 		-- Copy IO memory address 1 to accumulator, address set in line [0]
+CAH & A(0), 		-- Copy accumulator to a (Heap0)
+CHA & A(0), 		-- Copy a (Heap0) to accumulator
+CAH & A(1), 		-- Copy accumulator to b (Heap1)
+CHA & A(1), 		-- Copy b (Heap1) to accumulator
+CAH & A(2), 		-- Copy accumulator to c (Heap2)
+CHA & A(2), 		-- Copy c (Heap2) to accumulator
+CAH & A(3), 		-- Copy accumulator to d (Heap3)
+CHA & A(3), 		-- Copy d (Heap3) to accumulator
+CAS & A(1), 		-- Copy accumulator to SH memory address 1
+RST & A(0), 		-- Resets program counter to 0

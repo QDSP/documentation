@@ -1,0 +1,3 @@
+\chapter{Testing}
+\label{sec:testing}
+In order to determine if the redesigned QDSP and compiler remained compatible to the previous version and generated correct results a test-bench setup was done in Xilinx. In order to do this an existing QDSP program was ported to the new language, and the two were provided the same inputs and the resulting outputs were compared. The two tested setups almost the same results, though a small discrepancy between the calculated PWM signals did present itself. This was tracked down to be a rounding error in the old design, as a manual calculation of the result agreed with the new design. The data of the test can be found i \myref{appendix}{app:testresults}.

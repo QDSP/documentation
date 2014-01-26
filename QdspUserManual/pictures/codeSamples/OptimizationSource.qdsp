@@ -1,0 +1,17 @@
+config{
+	ProjectTitle = firstQDSP
+	EnableOptimization = false
+}
+
+define in  IO[1]
+define out SH[1]
+var a
+var b
+var c
+var d
+
+a = in
+b = a
+c = b
+d = c
+out = d

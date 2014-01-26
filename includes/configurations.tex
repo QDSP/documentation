@@ -1,0 +1,16 @@
+\begin{tabular}{c|c|c|p{6.6cm}}
+	\textbf{Name} & \textbf{Type} & \textbf{Default} & \textbf{Description}\\
+	\hline
+	ProjectTitle & String & NewQdsp & Title of the project\\
+	AutoCommentQDSPCode & Boolean & true & Comments the micro instructions\\
+	EnableOptimization & Boolean & true & Assigns the programing transmit address on SH memory for run time programming\\
+	RuntimeProgrammable & Boolean & false & Enables the capability of run time program the QDSP\\
+	HeapSize\footnotemark\addtocounter{footnote}{-1}\addtocounter{Hfootnote}{-1} & Integer & 32 & The amount of Heap registers.\\
+	ProgramMemorySize\footnotemark\addtocounter{footnote}{-1}\addtocounter{Hfootnote}{-1} & Integer & 128 & The amount of program memory available.\\
+	ProgramingControlAddress\footnotemark\addtocounter{footnote}{-1}\addtocounter{Hfootnote}{-1} & Integer & 7 & Assigns the programing control address on SH memory for run time programming\\
+	ProgramingStatusAddress\footnotemark\addtocounter{footnote}{-1}\addtocounter{Hfootnote}{-1} & Integer & 0 & Assigns the programing status address on SH memory for run time programming\\
+	ProgramingDataInAddress\footnotemark\addtocounter{footnote}{-1}\addtocounter{Hfootnote}{-1} & Integer & 1 & Assigns the programing revise address on SH memory for run time programming\\
+	ProgramingDataOutAddress\footnotemark\addtocounter{footnote}{-1}\addtocounter{Hfootnote}{-1} & Integer & 6 & \\
+	SHInterfaceType\footnotemark & String & Unity-Link & Changes the SH interface to match Unity-Link or uTosNet \\
+\end{tabular}
+\footnotetext{Only used if RuntimeProgrammable it true}

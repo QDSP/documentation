@@ -1,0 +1,7 @@
+define  input	IO[1]
+define output	SH[1]
+
+while(true){
+	output = input
+	// more code
+}

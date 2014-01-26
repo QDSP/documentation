@@ -1,0 +1,400 @@
+% Add packages
+\usepackage[T1]{fontenc}
+\usepackage[utf8x]{inputenc}
+\usepackage[english]{babel}
+\usepackage{graphicx}
+\usepackage{microtype}
+\usepackage{lmodern}
+\usepackage{lipsum}
+\usepackage{makeidx} % Indexing package
+\usepackage[intoc]{nomencl} % Nomenclature package
+\usepackage{color}
+\usepackage{mathpazo}
+\usepackage[crop=pdfcrop]{pstool}
+\usepackage{multirow}
+\usepackage{datatool}
+\usepackage{textcomp}
+%\usepackage[version=3]{mhchem}
+\usepackage{relsize}
+\usepackage[hidelinks]{hyperref}
+\usepackage{textpos}
+\usepackage{indentfirst}
+\usepackage{listings}
+\usepackage{slashbox} %grants acces to slash box for tables
+\usepackage{float} % Allow the use of H in floats (other options: http://texblog.net/latex-archive/graphics/prevent-floating-image-figure-table/)
+\usepackage{pgf}
+\usepackage{tikz}
+\usepackage{tikz-uml}
+%	\usetikzlibrary{arrows}
+%	\usetikzlibrary{automata}
+\usepackage{footnote}
+\usetikzlibrary{  arrows,%
+  automata,
+  shapes.misc,% wg. rounded rectangle
+  shapes.arrows,%
+  chains,%
+  matrix,%
+  positioning,% wg. " of "
+  scopes,%
+  decorations.pathmorphing,% /pgf/decoration/random steps | erste Graphik
+  shadows%
+}
+\usetikzlibrary{shapes,arrows,decorations.markings}
+\usetikzlibrary{shapes.geometric}
+\usetikzlibrary{calc}
+\usepackage{amsmath,bm,times}
+\usetikzlibrary{fit}
+\makeatletter
+\tikzset{
+  fitting node/.style={
+    inner sep=0pt,
+    fill=none,
+    draw=none,
+    reset transform,
+    fit={(\pgf@pathminx,\pgf@pathminy) (\pgf@pathmaxx,\pgf@pathmaxy)}
+  },
+  reset transform/.code={\pgftransformreset}
+}
+\makeatother
+
+%\usepackage[lofdepth,lotdepth]{subfig}
+\usepackage[margin=1cm]{caption}
+%\usepackage{caption}
+\usepackage{courier}
+
+\graphicspath{{pictures/}}
+
+\everymath{\displaystyle}
+
+% Avoid a warning
+\pdfminorversion=5
+
+% Define layout dimensions
+
+\setlrmarginsandblock{35mm}{25mm}{*}
+\setulmarginsandblock{30mm}{30mm}{*}
+\setheadfoot{8mm}{10mm}
+\checkandfixthelayout
+\OnehalfSpacing
+
+\setaftersecskip{1\onelineskip plus 3ex minus 3ex}
+\setaftersubsecskip{1\onelineskip plus 3ex minus 3ex}
+\setbeforesecskip{-1\onelineskip plus -3ex minus -3ex}
+\setbeforesubsecskip{-1\onelineskip plus -3ex minus -3ex}
+
+\EndPreamble
+
+%\usepackage{natbib} % Bibliography package
+%\usepackage{siunitx} % Should stay after \EndPreamble
+
+% Create a theorem environment
+%\usepackage{amsthm}
+\newtheorem{theorem}{Theorem}
+
+\usepackage{xcolor,calc}
+
+\makechapterstyle{combined}{
+  \setlength{\beforechapskip}{0cm}
+	\setlength{\midchapskip}{-60pt}
+  \setlength{\afterchapskip}{1.25cm}
+  \renewcommand*{\printchaptername}{}
+  \renewcommand*{\chapnumfont}{\normalfont\sffamily\bfseries\fontsize{65}{0}\selectfont}
+  \renewcommand*{\printchapternum}{\flushright\chapnumfont\textcolor[rgb]{.0,.0,.0}{\thechapter}}
+  \renewcommand*{\chaptitlefont}{\normalfont\sffamily\HUGE\bfseries}
+%  \renewcommand*{\chapnumfont}{\normalfont\sffamily\bfseries\fontsize{80}{0}\selectfont}
+%  \renewcommand*{\printchapternum}{\flushright\chapnumfont\textcolor[rgb]{.2745,.3019,.5176}{\thechapter}}
+%  \renewcommand*{\chaptitlefont}{\normalfont\sffamily\HUGE\bfseries}
+  \renewcommand*{\printchaptertitle}[1]{%
+    \raggedright\chaptitlefont\parbox[t]{\textwidth-3cm}{\raggedright##1}}
+}
+
+\chapterstyle{combined}
+
+% Enable indexing
+\makeindex
+
+% Enable nomenclature
+\makenomenclature
+
+
+% Make a list of appendices
+\newlistof{listofappendices}{loa}{List of Appendices}
+\newcounter{appCnt}
+\renewcommand{\theappCnt}{\Alph{appCnt}}
+\newcommand{\appChapter}[1]{%
+ \refstepcounter{appCnt}%
+ \chapter*{\theappCnt.\ #1}%
+ \addcontentsline{loa}{appCnt}{\numberline{\theappCnt}#1}
+}
+\newlistentry{appCnt}{loa}{0}
+\newlistentry[appCnt]{appSec}{loa}{1}
+\newcommand{\appSection}[1]{%
+ \refstepcounter{appSec}%
+ \section*{\theappSec.\ #1}%
+ \addcontentsline{loa}{appSec}{\protect\numberline{\theappSec}#1}
+}
+\setcounter{loadepth}{2}
+\newcounter{pseudo}
+\renewcommand{\thepseudo}{\Alph{pseudo}}
+
+
+% Enable line numbering
+%\usepackage{lineno}
+%\pagewiselinenumbers
+%\modulolinenumbers[5]
+
+% Change table of contents name
+\renewcommand*{\contentsname}{Table of Contents}
+\maxtocdepth{subsection} % Subsections and above
+
+% Make floats name bold
+\captionnamefont{\bfseries}
+
+% Get a signature command
+\makeatletter
+\newcommand*{\getlength}[1]{\strip@pt#1}
+\makeatother
+
+\newlength{\signlength}
+\setlength{\signlength}{0.5\textwidth}
+
+\newcommand{\signature}[1]{%
+\noindent \line(1,0){\getlength{\signlength}}\\
+\noindent #1
+}
+
+% Add measuring units to nomenclature
+\newcommand{\nomunit}[1]{\renewcommand{\nomentryend}{\hspace*{\fill}#1}}
+
+\captionstyle{\OnehalfSpacing}
+
+\setlength{\belowcaptionskip}{10pt plus 5pt minus 5pt}
+
+% Company logo
+\def\bCompanyLogo{false}
+
+% A fix for memoir-kluwer
+\renewcommand{\bf}{\textbf}
+
+% Subfigures
+\newsubfloat{figure}
+
+% Set listings
+%\lstset{numbers=left, numberstyle=\tiny, stepnumber=2, numbersep=5pt, breaklines=true, basicstyle=\small, language=C}
+\definecolor{light-gray}{gray}{0.95}
+%\lstset{
+%language=VHDL,                  % choose the language of the code
+%%extendedchars=true,
+%frame=shadowbox,	
+%basicstyle=\small,       % the size of the fonts that are used for the code
+%numbers=left,                   % where to put the line-numbers
+%numberstyle=\tiny,      % the size of the fonts that are used for the line-numbers
+%stepnumber=1,                   % the step between two line-numbers. If it's 1
+%                                % will be numbered
+%numbersep=5pt,                  % how far the line-numbers are from the code
+%backgroundcolor=\color{light-gray},    % choose the background color. Youmust
+%showtabs=false,       	       % show tabs within strings adding
+%tabsize=4,	       		       % sets default tabsize to 2 spaces
+%breaklines=true,               % sets automatic line breaking
+%breakatwhitespace=false,       % sets if automatic breaks should only happen at
+%captionpos = b,
+%}
+\renewcommand{\lstlistingname}{Code Sample}
+\lstset{
+        basicstyle=\footnotesize\ttfamily, % Standardschrift
+        numbers=left,               % Ort der Zeilennummern
+        numberstyle=\color{blue!20!black!30!green}\tiny\ttfamily,          % Stil der Zeilennummern
+        %stepnumber=2,               % Abstand zwischen den Zeilennummern
+        numbersep=5pt,              % Abstand der Nummern zum Text
+        tabsize=2,                  % Groesse von Tabs
+        extendedchars=true,         %
+        breaklines=true,            % Zeilen werden Umgebrochen
+        keywordstyle=\color{red},
+%   		frame=b,         
+%        keywordstyle=[1]\textbf,    % Stil der Keywords
+%        keywordstyle=[2]\textbf,    %
+%        keywordstyle=[3]\textbf,    %
+%        keywordstyle=[4]\textbf,   \sqrt{\sqrt{}} %
+        stringstyle=\color{blue}\ttfamily, % Farbe der String
+        showspaces=false,           % Leerzeichen anzeigen ?
+        showtabs=false,             % Tabs anzeigen ?
+        xleftmargin=17pt,
+        framexleftmargin=17pt,
+        framexrightmargin=5pt,
+        framexbottommargin=4pt,
+        %backgroundcolor=\color{lightgray},
+        showstringspaces=false      % Leerzeichen in Strings anzeigen ?     
+}
+%
+\lstloadlanguages{% Check Dokumentation for further languages ...
+%        %[Visual]Basic
+%        %Pascal
+%        C,
+%        %C++
+%        %XML
+%        %HTML
+%        Java
+}
+
+\lstdefinelanguage{nxc}[]{c}
+{morekeywords={bool,string, mutex, Wait},
+sensitive=false,
+deletecomment=[s]{/*}{*/},
+%morestring=[b]{/*}{*/}
+}
+
+\lstdefinelanguage{UCF}[]{VHDL}
+{morekeywords={LOC,NET, PULLUP},
+sensitive=false,
+morecomment=[l]{\#}
+%morestring=[b]{/*}{*/}
+}
+
+\lstdefinelanguage{qdsp}[]{c}
+{morekeywords={var, const},
+sensitive=false,
+deletecomment=[s]{/*}{*/},
+%morestring=[b]{/*}{*/}
+}
+
+
+\lstdefinestyle{c}{
+					language=c,
+					basicstyle=\scriptsize \ttfamily \color[HTML]{000000},
+					keywordstyle=\scriptsize \ttfamily \color[HTML]{8000FF},
+					identifierstyle=\scriptsize \ttfamily \color[HTML]{000000}, 
+					commentstyle=\scriptsize \color[HTML]{008000},
+					stringstyle=\scriptsize \ttfamily \color[HTML]{808080},
+					backgroundcolor=\color[rgb]{0.97,0.97,0.97},
+					breaklines=true,%			
+					rangeprefix={\/*\ \{\ },% curly left brace plus space
+					rangesuffix={\ \}\ *\/},% space plus curly right brace
+					rangebeginsuffix={\ start},
+					rangeendsuffix={\ end},
+					includerangemarker=false
+					}
+					
+\lstdefinestyle{csharp}{
+					language=[Sharp]C,
+					belowcaptionskip=-1pt,
+					basicstyle=\scriptsize \ttfamily \color[HTML]{000000},
+					keywordstyle=\scriptsize \ttfamily \color[HTML]{8000FF},
+					identifierstyle=\scriptsize \ttfamily \color[HTML]{000000}, 
+					commentstyle=\scriptsize \color[HTML]{008000},
+					stringstyle=\scriptsize \ttfamily \color[HTML]{808080},
+					backgroundcolor=\color[rgb]{0.97,0.97,0.97},
+					breaklines=true,%			
+					rangeprefix={\/*\ \{\ },% curly left brace plus space
+					rangesuffix={\ \}\ *\/},% space plus curly right brace
+					rangebeginsuffix={\ start},
+					rangeendsuffix={\ end},
+					includerangemarker=false
+					}
+					
+\lstdefinestyle{vhdl}{
+					language=VHDL,
+					belowcaptionskip=-1pt,
+					basicstyle=\scriptsize \ttfamily \color[HTML]{000000},
+					keywordstyle=\scriptsize \ttfamily \color[HTML]{0000FF},
+					identifierstyle=\scriptsize \ttfamily \color[HTML]{000000}, 
+					commentstyle=\scriptsize \color[HTML]{008000},
+					stringstyle=\scriptsize \ttfamily \color[HTML]{808080},
+					backgroundcolor=\color[rgb]{0.97,0.97,0.97},
+					breaklines=true,%			
+					rangeprefix={--\ \{\ },% curly left brace plus space
+					rangesuffix={\ \}},% space plus curly right brace
+					rangebeginsuffix={\ start},
+					rangeendsuffix={\ end},
+					includerangemarker=false
+					}
+					
+\lstdefinestyle{ucf}{
+					language=UCF,
+					belowcaptionskip=-1pt,
+					basicstyle=\scriptsize \ttfamily \color[HTML]{000000},
+					keywordstyle=\scriptsize \ttfamily \color[HTML]{0000FF},
+					identifierstyle=\scriptsize \ttfamily \color[HTML]{000000}, 
+					commentstyle=\scriptsize \color[HTML]{008000},
+					stringstyle=\scriptsize \ttfamily \color[HTML]{808080},
+					backgroundcolor=\color[rgb]{0.97,0.97,0.97},
+					breaklines=true,%			
+					rangeprefix={\#\ \{\ },% curly left brace plus space
+					rangesuffix={\ \}},% space plus curly right brace
+					rangebeginsuffix={\ start},
+					rangeendsuffix={\ end},
+					includerangemarker=false
+					}
+
+\DeclareCaptionFont{white}{\color{white}}
+\DeclareCaptionFormat{listing}{\colorbox[cmyk]{0.43, 0.35, 0.35,0.01}{\parbox{\textwidth}{\hspace{15pt}#1#2#3}}}
+\captionsetup[lstlisting]{format=listing,labelfont=white,textfont=white, singlelinecheck=false, margin=0pt, font={bf,footnotesize}}
+%
+
+
+\usepackage{todonotes}
+\graphicspath{{./pictures/}}
+\setsecnumdepth{subsection}
+\usepackage{amsmath}
+
+\setsecheadstyle{\normalfont\sffamily\huge\bfseries}
+\setsubsecheadstyle{\normalfont\sffamily\LARGE\bfseries}
+\setsubsubsecheadstyle{\normalfont\sffamily\Large\bfseries}
+
+\renewcommand{\bibsection}{\chapter{Bibliography}}
+
+%\hypersetup{
+%    colorlinks,
+%    citecolor=black,
+%    filecolor=black,
+%    linkcolor=black,
+%    urlcolor=black
+%}
+
+
+%-----------------------
+% Functions by Jon
+%-----------------------
+
+\newcommand*{\mono}[1]{{\ttfamily #1}}
+
+\newcommand*{\tosNetTabular}[1]{
+\DTLsetseparator{;}
+\DTLloaddb[keys={register,bregister,word0,word1,word2,word3}]{#1}{#1}
+\begin{tabular}{|c|*{5}{c|}}\hline
+	\multicolumn{2}{|c|}{
+    \multirow{2}{*}{\backslashbox{Register}{Word}}} &0&1&2&3 \\ \cline{3-6}
+    \multicolumn{2}{|c|}{} &0b00&0b01&0b10&0b11 \\\hline
+    \DTLforeach{#1}{
+    	\register=register,\bregister=bregister,\worda=word0,\wordb=word1,\wordc=word2,\wordd=word3}{%
+	  	\DTLiffirstrow{}{\\} \register & \bregister & \worda & \wordb & \wordc & \wordd }
+   \\\hline
+\end{tabular}
+}
+
+\newcommand{\makepoints}[5]{
+    \foreach \k in {1, ..., #5}
+    {
+        \pgfmathsetmacro{\dist}{\k * (1 / (#5 + 1))}
+        \coordinate (#1 #4 \k) at ($(#1.#2)!\dist!(#1.#3)$);
+    }
+}
+
+\newcommand{\makepointers}[6]{
+    \foreach \k in {1, ..., #6}
+    {
+        \pgfmathsetmacro{\dist}{\k * (1 / (#6 + 1))}
+        \coordinate (#1 #2 #5 \k) at ($(#3)!\dist!(#4)$);
+    }
+}
+\newcommand{\makesqpointers}[6]{
+	\makepointers{#1}{#2}{#1.west  |- #2.north}{#1.west  |- #2.south} {left}   {#3};
+	\makepointers{#1}{#2}{#1.north -| #2.west} {#1.north -| #2.east}  {top}    {#4};
+	\makepointers{#1}{#2}{#1.east  |- #2.north}{#1.east  |- #2.south} {right}  {#5};
+	\makepointers{#1}{#2}{#1.south -| #2.west} {#1.south -| #2.east}  {bottom} {#6};
+}
+\newcommand{\makesqpoints}[5]{
+	\makepoints{#1}{north west}{south west}{left}	{#2};
+	\makepoints{#1}{north west}{north east}{top}		{#3};
+	\makepoints{#1}{north east}{south east}{right}	{#4};
+	\makepoints{#1}{south west}{south east}{bottom}	{#5};
+}

@@ -1,0 +1,4 @@
+define sheredA SH[1]
+define ioA IO[1]
+
+sheredA = ioA

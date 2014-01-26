@@ -1,0 +1,54 @@
+%*\tikzmark{0}*)CHA & A(4), 		-- Copy dir2 (Heap4) to accumulator
+CAH & A(4), 		-- Copy accumulator to dir2 (Heap4)
+CHA & A(5), 		-- Copy Constant = 0 (Heap5) to accumulator
+CAI & A(4), 		-- Copy accumulator to IO memory address 4
+CHA & A(6), 		-- Copy Constant = 1 (Heap6) to accumulator
+LSH & A(16), 		-- Left shifting accumulator 16 times
+CAH & A(0), 		-- Copy accumulator to v1 (Heap0)
+%*\tikzmark{7}*)CHA & A(6), 		-- Copy Constant = 1 (Heap6) to accumulator
+CAH & A(7), 		-- Copy accumulator to sys0 (Heap7)
+CHA & A(3), 		-- Copy dir (Heap3) to accumulator
+CMP & A(7), 		-- Compares accumulator with sys0 (Heap7), sets flags for branch instruction
+BRE & A(13), 		-- Absolute jump over next line, if equal flag is set. Codeline 13
+%*\tikzmark{12}*)JMP & A(17), 		-- Absolute jump to start of next Else. Codeline 17
+%*\tikzmark{13}*)CHA & A(0), 		-- Copy v1 (Heap0) to accumulator
+LSH & A(1), 		-- Left shifting accumulator 1 times
+CAH & A(0), 		-- Copy accumulator to v1 (Heap0)
+JMP & A(20), 		-- Absolute jump to end of If. Codeline 20
+%*\tikzmark{17}*)CHA & A(0), 		-- Copy v1 (Heap0) to accumulator
+RSH & A(1), 		-- Right shifting accumulator 1 times
+CAH & A(0), 		-- Copy accumulator to v1 (Heap0)
+%*\tikzmark{20}*)CHA & A(0), 		-- Copy v1 (Heap0) to accumulator
+CAI & A(4), 		-- Copy accumulator to IO memory address 4
+CHA & A(5), 		-- Copy Constant = 0 (Heap5) to accumulator
+CAH & A(2), 		-- Copy accumulator to v2 (Heap2)
+JMP & A(29), 		-- Absolute jump to end of Loop, for compare. Codeline 29
+%*\tikzmark{25}*)NOP & A(0), 		-- Do Nothing
+CHA & A(2), 		-- Copy v2 (Heap2) to accumulator
+ADD & A(6), 		-- Adding Constant = 1 (Heap6) to accumulator
+CAH & A(2), 		-- Copy accumulator to v2 (Heap2)
+%*\tikzmark{29}*)CHA & A(1), 		-- Copy sleeptime (Heap1) to accumulator
+CAH & A(7), 		-- Copy accumulator to sys0 (Heap7)
+CHA & A(2), 		-- Copy v2 (Heap2) to accumulator
+CMP & A(7), 		-- Compares accumulator with sys0 (Heap7), sets flags for branch instruction
+BRL & A(25), 		-- Absolute jump to start of Loop, if less than flag is set. Codeline 25
+%*\tikzmark{34}*)CHA & A(6), 		-- Copy Constant = 1 (Heap6) to accumulator
+LSH & A(22), 		-- Left shifting accumulator 22 times
+CAH & A(7), 		-- Copy accumulator to sys0 (Heap7)
+CHA & A(0), 		-- Copy v1 (Heap0) to accumulator
+CMP & A(7), 		-- Compares accumulator with sys0 (Heap7), sets flags for branch instruction
+BRL & A(43), 		-- Absolute jump to start of next ElseIf, if less than flag is set. Codeline 43
+%*\tikzmark{40}*)CHA & A(5), 		-- Copy Constant = 0 (Heap5) to accumulator
+CAH & A(3), 		-- Copy accumulator to dir (Heap3)
+JMP & A(51), 		-- Absolute jump to end of If. Codeline 51
+%*\tikzmark{43}*)CHA & A(6), 		-- Copy Constant = 1 (Heap6) to accumulator
+LSH & A(19), 		-- Left shifting accumulator 19 times
+CAH & A(7), 		-- Copy accumulator to sys0 (Heap7)
+CHA & A(0), 		-- Copy v1 (Heap0) to accumulator
+CMP & A(7), 		-- Compares accumulator with sys0 (Heap7), sets flags for branch instruction
+BRG & A(51), 		-- Absolute jump to start of next Else, if grater than flag is set. Codeline 51
+%*\tikzmark{49}*)CHA & A(6), 		-- Copy Constant = 1 (Heap6) to accumulator
+CAH & A(3), 		-- Copy accumulator to dir (Heap3)
+%*\tikzmark{51}*)JMP & A(7), 		-- Absolute jump to start of Loop. Codeline 7
+%*\tikzmark{52}*)RST & A(0), 		-- Resets program counter to 0
+%*\tikzmark{53}*)

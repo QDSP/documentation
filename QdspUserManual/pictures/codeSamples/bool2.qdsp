@@ -1,0 +1,5 @@
+var x = SH[1]
+var y = SH[2]
+if(x + 5 >= y * 2){
+	//code
+}
